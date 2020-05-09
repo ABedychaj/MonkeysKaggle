@@ -31,6 +31,42 @@ name2id = {
 }
 
 
+class ImageTransform():
+    '''
+    This is image transform class. This class's action differs depending on the 'train' or 'val'.
+    It resize image size and normarize image color.
+    Attributes
+    -----------
+    resize:int
+        img size after resize
+
+    mean : (R,G,B)
+        average of each channel
+
+    std : (R,G,B)
+        standard deviation of each channel
+    '''
+
+    def __init__(self, resize, mean, std):
+        self.data_transform = {
+            'training': transforms.Compose([
+                transforms.RandomResizedCrop(resize, scale=(0.5, 1.0)),
+                transforms.RandomHorizontalFlip(),
+                transforms.ToTensor(),
+                transforms.Normalize(mean, std)
+            ]),
+            'validation': transforms.Compose([
+                transforms.Resize(resize),
+                transforms.CenterCrop(resize),
+                transforms.ToTensor(),
+                transforms.Normalize(mean, std)
+            ])
+        }
+
+    def __call__(self, img, phase='training'):
+        return self.data_transform[phase](img)
+
+
 class MonkeyDataset(Dataset):
 
     def __init__(self, path, transform=None, phase='training', download=False):
