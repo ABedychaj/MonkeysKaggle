@@ -1,8 +1,9 @@
-import glob
+import os
 
 import kaggle
 from PIL import Image
 from torch.utils.data import Dataset
+from torchvision import transforms
 
 label2name = {
     'n0': 'alouatta_palliata',
@@ -74,16 +75,18 @@ class MonkeyDataset(Dataset):
         if download:
             kaggle.api.authenticate()
             kaggle.api.dataset_download_files('slothkong/10-monkey-species', path=path, unzip=True)
-        else:
-            self.file_list = self.make_datapath_list(path, phase)
-            self.transform = transform
-            self.phase = phase
+
+        self.file_list = self.make_datapath_list(path, phase)
+        self.transform = transform
+        self.phase = phase
 
     @staticmethod
     def make_datapath_list(root_path, phase):
         path_list = []
-        for path in glob.glob(root_path + "/" + phase):
-            path_list.append(path)
+        for root, dirs, files in os.walk(root_path + "/" + phase):
+            for file in files:
+                if file.endswith('.jpg'):
+                    path_list.append(root + "/" + file)
         return path_list
 
     def __len__(self):
