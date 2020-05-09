@@ -34,7 +34,7 @@ name2id = {
 
 class ImageTransform():
     '''
-    This is image transform class. This class's action differs depending on the 'train' or 'val'.
+    This is image transform class. This class's action differs depending on the 'training' or 'validation'.
     It resize image size and normarize image color.
     Attributes
     -----------
@@ -97,7 +97,7 @@ class MonkeyDataset(Dataset):
         img = Image.open(img_path)
 
         # preprocessing
-        img_transformed = self.transform(img, self.phase)  # torch.Size([3,224,224])
+        img_transformed = self.transform(img, self.phase) if self.transform is not None else transforms.ToTensor()(img)
 
         # get image label from file name
         arr = img_path.split('/')
