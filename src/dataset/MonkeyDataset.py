@@ -5,6 +5,8 @@ from PIL import Image
 from torch.utils.data import Dataset
 from torchvision import transforms
 
+
+
 label2name = {
     'n0': 'alouatta_palliata',
     'n1': 'erythrocebus_patas',
