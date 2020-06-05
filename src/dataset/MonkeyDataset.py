@@ -5,8 +5,6 @@ from PIL import Image
 from torch.utils.data import Dataset
 from torchvision import transforms
 
-
-
 label2name = {
     'n0': 'alouatta_palliata',
     'n1': 'erythrocebus_patas',
@@ -53,7 +51,7 @@ class ImageTransform():
     def __init__(self, resize, mean, std):
         self.data_transform = {
             'training': transforms.Compose([
-                transforms.ToPILImage(),
+                transforms.ToPILImage(),  # TODO: better cropping - we need monkey on each picture (transforms.Scale)
                 transforms.RandomResizedCrop(resize, scale=(0.5, 1.0)),
                 transforms.RandomHorizontalFlip(),
                 transforms.ToTensor(),
