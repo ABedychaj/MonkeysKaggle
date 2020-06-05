@@ -51,12 +51,14 @@ class ImageTransform():
     def __init__(self, resize, mean, std):
         self.data_transform = {
             'training': transforms.Compose([
+                transforms.ToPILImage(),  # TODO: better cropping - we need monkey on each picture (transforms.Scale)
                 transforms.RandomResizedCrop(resize, scale=(0.5, 1.0)),
                 transforms.RandomHorizontalFlip(),
                 transforms.ToTensor(),
                 transforms.Normalize(mean, std)
             ]),
             'validation': transforms.Compose([
+                transforms.ToPILImage(),
                 transforms.Resize(resize),
                 transforms.CenterCrop(resize),
                 transforms.ToTensor(),
